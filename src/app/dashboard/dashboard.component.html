@@ -1,0 +1,283 @@
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+        <li class="breadcrumb-item active">Dashboard</li>
+    </ol>
+</nav>
+
+<h5>Dashboard</h5>
+<div class="row">
+    <div class="col-lg-3 pb-3" style="background-color: #e9e6e6">
+        <div class="row">
+            <div class="col-11 mt-1 text-white text-center mx-2 rounded pt-2 pb-2 font-weight-bold"
+                style="background-color: #1ba4ce; font-family: 'Arial Narrow Bold',sans-serif">{{Designation}}</div>
+            <div class="col-12 text-center mt-3"><img src="assets/user.png" width="120px"></div>
+            <div class="col-12 text-center pt-2 pb-2 font-weight-bold" style="font-family: Tahoma">{{Username}}</div>
+            <div class="col-12 text-center pt-2 pb-2" style="font-family: Arial">TEAM SUMMARY</div>
+            <div class="col-12 mb-3">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">NO. OF TEAM MEMBERS
+                        <span class="badge badge-pill badge-secondary"
+                            style="font-size: 13px">{{NoOfTeamMembers}}</span></li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">TOTAL COST OF ALL
+                        PROJECTS
+                        <span class="badge badge-pill badge-secondary" style="font-size: 13px">$
+                            {{TotalCostOfAllProjects}}K</span></li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">PENDING TASKS
+                        <span class="badge badge-pill badge-secondary" style="font-size: 13px">{{PendingTasks}} /
+                            {{TotalTasks}}</span></li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">UPCOMING PROJECTS
+                        <span class="badge badge-pill badge-secondary"
+                            style="font-size: 13px">{{UpComingProjects}}</span></li>
+                </ul>
+            </div>
+            <div class="col-12 text-center pt-2 pb-2" style="font-family: Arial">CLIENTS</div>
+            <div class="col-12 mb-3">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" *ngFor="let clientList of Clients">{{clientList}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="col-12 pt-0 pb-2" style="background-color: #e9e6e6">
+                <div class="row mt-2">
+                    <div class="col-6 text-left">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown">
+                                All Projects
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" *ngFor="let projectList of Projects">{{projectList}}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 text-right">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown">
+                                Years
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" *ngFor="let year of Years">{{year}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-11 mx-auto mt-1 text-white text-center mx-2 rounded pt-2 pb-2 rounded font-weight-bold"
+            style="background-color: #1ba4ce; font-family: 'Arial Narrow Bold'">PROJECT BRIEFING</div>
+        <div class="col-12">
+            <table class="table table-borderless">
+                <tr>
+                    <td>Project Cost</td>
+                    <td>$ {{ProjectCost}}</td>
+                </tr>
+                <tr>
+                    <td>Current Expenditure</td>
+                    <td>$ {{CurrentExpenditure}}</td>
+                </tr>
+                <tr>
+                    <td>Available Funds</td>
+                    <td>$ {{AvailableFunds}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-11 mx-auto mt-1 text-white text-center mx-2 rounded pt-2 pb-2 rounded font-weight-bold"
+            style="background-color: #1ba4ce; font-family: 'Arial Narrow Bold'">
+            TEAM MEMBERS SUMMARY
+        </div>
+        <div class="col-12">
+            <table class="table table-borderless">
+                <th class="font-weight-bold">Region</th>
+                <th class="font-weight-bold">Team Member Count</th>
+                <th class="font-weight-bold">Temporily Unavailable Members</th>
+                <tr *ngFor="let teamMembersSummaryList of TeamMembersSummary">
+                    <td class="font-weight-bold">{{teamMembersSummaryList.Region}}</td>
+                    <td class="text-center">{{teamMembersSummaryList.TeamMemberCount}}</td>
+                    <td class="text-center">{{teamMembersSummaryList.TemporarilyUnavailableMembers}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-3" style="background-color: #e9e6e6">
+        <div class="row">
+            <div class="col-11 mx-auto mt-1 text-white text-center rounded pt-2 pb-2 font-weight-bold"
+                style="background-color: #1ba4ce; font-family: 'Arial Narrow Bold'">TEAM MEMBERS</div>
+        </div>
+        <div class="col-lg-12 pt-2 p-0">
+            <div class="accordian" id="accordian">
+                <div class="card" *ngFor="let teamMemberList of TeamMembers;let i = index">
+                    <div class="card-header bg-secondary" id="card1">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link text-white" type="button" data-toggle="collapse"
+                                [attr.data-target]="'#cardbody' + i">{{teamMemberList.Region}}</button>
+                        </h2>
+                    </div>
+                    <div [id]="'cardbody' + i" class="collapse" data-parent="#accordian">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tr *ngFor="let members of teamMemberList.Members">
+                                    <td>{{members.ID}}</td>
+                                    <td>{{members.Name}}</td>
+                                    <td><i class="fa fa-phone mr-1"></i>{{members.Status}}</td>
+                                </tr>
+                                <!-- <tr>
+                                    <td>2</td>
+                                    <td>Miller</td>
+                                    <td><i class="fa fa-phone mr-1"></i>Available</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Jones</td>
+                                    <td><i class="fa fa-user-times mr-1"></i>Busy</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>James</td>
+                                    <td><i class="fa fa-user-times mr-1"></i>Busy</td>
+                                </tr> -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2
+                <div class="card">
+                    <div class="card-header bg-secondary" id="card2">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link text-white" type="button" data-toggle="collapse"
+                                data-target="#cardbody2">SOUTH</button>
+                        </h2>
+                    </div>
+                    <div id="cardbody2" class="collapse" data-parent="#accordian">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Ford</td>
+                                    <td><i class="fa fa-phone mr-1"></i>Available</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Miller</td>
+                                    <td><i class="fa fa-phone mr-1"></i>Available</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Jones</td>
+                                    <td><i class="fa fa-user-times mr-1"></i>Busy</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>James</td>
+                                    <td><i class="fa fa-user-times mr-1"></i>Busy</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header bg-secondary" id="card3">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link text-white" type="button" data-toggle="collapse"
+                                data-target="#cardbody3">WEST</button>
+                        </h2>
+                    </div>
+                    <div id="cardbody3" class="collapse" data-parent="#accordian">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Ford</td>
+                                    <td><i class="fa fa-phone mr-1"></i>Available</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Miller</td>
+                                    <td><i class="fa fa-phone mr-1"></i>Available</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Jones</td>
+                                    <td><i class="fa fa-user-times mr-1"></i>Busy</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>James</td>
+                                    <td><i class="fa fa-user-times mr-1"></i>Busy</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header bg-secondary" id="card4">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link text-white" type="button" data-toggle="collapse"
+                                data-target="#cardbody4">NORTH</button>
+                        </h2>
+                    </div>
+                    <div id="cardbody4" class="collapse" data-parent="#accordian">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Ford</td>
+                                    <td><i class="fa fa-phone mr-1"></i>Available</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Miller</td>
+                                    <td><i class="fa fa-phone mr-1"></i>Available</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Jones</td>
+                                    <td><i class="fa fa-user-times mr-1"></i>Busy</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>James</td>
+                                    <td><i class="fa fa-user-times mr-1"></i>Busy</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
