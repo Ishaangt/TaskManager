@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DashboardService } from '../../dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,6 +24,9 @@ export class DashboardComponent implements OnInit {
   TeamMembers = [];
   TeamMembersSummary = [];
 
+  constructor(private dashboardService: DashboardService){
+
+  }
   ngOnInit() {
     this.Designation = "Team Leader";
     this.Username = "Ishaan Gupta";
@@ -30,7 +34,7 @@ export class DashboardComponent implements OnInit {
     this.TotalCostOfAllProjects = 12;
     this.PendingTasks = 4;
     this.TotalTasks = 12;
-    this.ProjectCost = 210000234;
+    this.ProjectCost = 4000000;
     this.UpComingProjects = 7;
     this.CurrentExpenditure = 212312124;
     this.AvailableFunds = 34228832;
@@ -48,12 +52,7 @@ export class DashboardComponent implements OnInit {
       "East","South","West","North"
     ];
 
-    this.TeamMembersSummary = [
-      {Region: "East", TeamMemberCount: 20, TemporarilyUnavailableMembers: 4},
-      {Region: "West", TeamMemberCount: 14, TemporarilyUnavailableMembers: 7},
-      {Region: "South", TeamMemberCount: 26, TemporarilyUnavailableMembers: 1},
-      {Region: "North", TeamMemberCount: 11, TemporarilyUnavailableMembers: 0}
-    ];
+    this.TeamMembersSummary = this.dashboardService.getTeamMembersSummary();
 
     this.TeamMembers = [
       {
@@ -89,5 +88,25 @@ export class DashboardComponent implements OnInit {
         ]
       }
     ]
+  }
+
+  onProjectChange($event){
+    if($event.target.innerHTML == "Project 1"){
+      this.ProjectCost = 10000;
+      this.CurrentExpenditure = 20000
+      this.AvailableFunds= 100000
+    } else if($event.target.innerHTML == "Project 2"){
+      this.ProjectCost = 20000;
+      this.CurrentExpenditure = 40000
+      this.AvailableFunds= 200000
+    } else if($event.target.innerHTML == "Project 3"){
+      this.ProjectCost = 30000;
+      this.CurrentExpenditure = 60000
+      this.AvailableFunds= 300000
+    } else if($event.target.innerHTML == "Project 4"){
+      this.ProjectCost = 40000;
+      this.CurrentExpenditure = 80000
+      this.AvailableFunds= 400000
+    }
   }
 }
