@@ -5,8 +5,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AboutComponent } from './about/about.component';
 import { HomeComponent } from './home/home.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
-import { DashboardService } from '../dashboard.service';
+import { DashboardService } from './services/dashboard.service';
 import { RouterModule } from '@angular/router';
+import { ProjectsComponent } from './projects/projects.component';
+import { ProjectsService } from './services/projects.service';
 
 
 
@@ -15,7 +17,8 @@ import { RouterModule } from '@angular/router';
     DashboardComponent,
     AboutComponent,
     HomeComponent,
-    MyProfileComponent
+    MyProfileComponent,
+    ProjectsComponent
   ],
   imports: [
     CommonModule,
@@ -24,10 +27,13 @@ import { RouterModule } from '@angular/router';
   exports: [
     DashboardComponent,
     HomeComponent,
-    MyProfileComponent
+    MyProfileComponent,
+    ProjectsComponent,
+    AboutComponent
   ],
   providers: [
-    DashboardService
+    DashboardService,
+    ProjectsService
   ]
 })
 export class AdminModule { }

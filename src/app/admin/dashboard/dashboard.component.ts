@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DashboardService } from '../../dashboard.service';
+import { DashboardService } from '../services/dashboard.service';
+import { TeamMembers } from '../models/team-members';
+import { TeamMembersService } from '../services/team-members.service';
+import { TeamMembersSummary } from '../models/team-members-summary';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,10 +24,10 @@ export class DashboardComponent implements OnInit {
   Projects: string[];
   Years: number[] = [];
   Zones: string[];
-  TeamMembers = [];
-  TeamMembersSummary = [];
+  TeamMembers: TeamMembers[];
+  TeamMembersSummary: TeamMembersSummary[];
 
-  constructor(private dashboardService: DashboardService){
+  constructor(private dashboardService: DashboardService, private teamMemberService: TeamMembersService){
 
   }
   ngOnInit() {
@@ -52,42 +55,17 @@ export class DashboardComponent implements OnInit {
       "East","South","West","North"
     ];
 
-    this.TeamMembersSummary = this.dashboardService.getTeamMembersSummary();
+   this.dashboardService.getTeamMembersSummary().subscribe(
+     (response: TeamMembersSummary[]) => {
+       this.TeamMembersSummary = response["atc"];
+     }
+   );
 
-    this.TeamMembers = [
-      {
-        Region: "East", Members: [
-          {ID: 1, Name: "Ishaan Gupta", Status: "Available"},
-          {ID: 1, Name: "Mayank Walia", Status: "Available"},
-          {ID: 1, Name: "Rahul Lahiri", Status: "Busy"},
-          {ID: 1, Name: "Amit M", Status: "Busy"}
-        ]
-      },
-      {
-        Region: "South", Members: [
-          {ID: 1, Name: "Rahul Kumar", Status: "Available"},
-          {ID: 1, Name: "Rahul Agarwal", Status: "Available"},
-          {ID: 1, Name: "Ajay Rana", Status: "Busy"},
-          {ID: 1, Name: "Nitish Singh", Status: "Busy"}
-        ]
-      },
-      {
-        Region: "West", Members: [
-          {ID: 1, Name: "Nidhi Tyagi", Status: "Available"},
-          {ID: 1, Name: "Aparna Tyagi", Status: "Available"},
-          {ID: 1, Name: "Santosh Sarani", Status: "Busy"},
-          {ID: 1, Name: "Kushal Verma", Status: "Busy"}
-        ]
-      },
-      {
-        Region: "North", Members: [
-          {ID: 1, Name: "Soumyajyoti", Status: "Available"},
-          {ID: 1, Name: "Pratik P", Status: "Available"},
-          {ID: 1, Name: "Shubham Sharma", Status: "Busy"},
-          {ID: 1, Name: "RajKiran", Status: "Busy"}
-        ]
+    this.teamMemberService.getAllTeamMembers().subscribe(
+      (response: TeamMembers[]) => {
+        this.TeamMembers = response;
       }
-    ]
+    );
   }
 
   onProjectChange($event){
