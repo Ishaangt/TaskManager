@@ -9,7 +9,7 @@ import { DashboardService } from './services/dashboard.service';
 import { RouterModule } from '@angular/router';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectsService } from './services/projects.service';
-
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -22,7 +22,8 @@ import { ProjectsService } from './services/projects.service';
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    FormsModule
   ],
   exports: [
     DashboardComponent,
