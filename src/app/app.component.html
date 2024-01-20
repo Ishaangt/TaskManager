@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-sm bg-success navbar-dark">
+    <a class="navbar-brand ms-4"> Angular Task Manager </a>
+    <button class="navbar-toggler" title="mynav" type="button" data-bs-toggle="collapse" data-bs-target="#mynav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mynav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item" *ngIf="loginService.currentUser != ''">
+          <a class="nav-link" routerLink="dashboard">Dashboard</a>
+        </li>
+        <li class="nav-item" *ngIf="loginService.currentUser != ''">
+          <a class="nav-link" routerLink="profile">Profile</a>
+        </li>
+        <li class="nav-item" *ngIf="loginService.currentUser == ''">
+          <a class="nav-link" routerLink="login">Login</a>
+        </li>
+        <li class="nav-item" *ngIf="loginService.currentUser == ''">
+          <a class="nav-link" routerLink="register">Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="about">About</a>
+        </li>
+        <li class="nav-item" *ngIf="loginService.currentUser != ''">
+          <a class="nav-link" routerLink="projects">Projects</a>
+        </li>
+      </ul>
+      <form class="d-flex me-4">
+        <div class="input-group">
+            <span class="input-group-text" id="search">
+              <i class="fa fa-search"></i>
+            </span>
+          <input type="text" class="form-control" aria-placeholder="Search">
+          <button class="btn btn-warning" type="button">Search</button>
+        </div>
+      </form>
+      <div class="dropdown text-center d-flex ms-4 me-4" *ngIf="loginService.currentUser != ''">
+        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="../assets/user.png" alt="user" width="50px" height="50px" class="rounded-circle">
+          <ul class="dropdown-menu dropdown-menu-sm-end text-small mt-2 dropdown-menu-dark" aria-labelledby="userDropdown">
+            <li *ngIf="loginService.currentUser != ''"><a routerLink="profile" class="dropdown-item" title="username">{{loginService.currentUser}}</a></li>
+            <li *ngIf="loginService.currentUser != ''"><hr class="dropdown-divider" style="border-color: gainsboro;"></li>
+            <li><a href="#" class="dropdown-item" (click) = "loginService.Logout()">Logout</a></li>
+          </ul>
+        </a>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="container-fluid">
+    <router-outlet></router-outlet>
+  </div>
+  
+  

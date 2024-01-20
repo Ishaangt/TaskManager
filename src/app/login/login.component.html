@@ -1,0 +1,33 @@
+<form class="row g-3 form-signin mt-4">
+    <div class="col-lg-10 mx-auto">
+        <div class="row g-3">
+            <img src="../../assets/17112629_Cropped.jpg" title="SignInImage" class="col-lg-6"
+                style="flex-shrink: 0; mix-blend-mode: luminosity;">
+            <div class="col-lg-4 align-self-center">
+                <h3>Sign In</h3>
+                <div class="row" *ngIf="loginError != ''">
+                    <i class="bi bi-exclamation-circle-fill" style="color: rgb(215,64,58);"><span class="text-danger ms-2" id="loginError">{{loginError}}</span></i>
+                </div>
+                <div class="input-group mt-4">
+                    <label for="txtUsername" class="form-label pt-1 col-md-4" aria-label="username">Username: </label>
+                    <input type="text" id="txtUsername" name="txtUsername" class="form-control col-md-4" [(ngModel)] ="loginViewModel.UserName" aria-placeholder="username">
+                </div>
+                <div class="input-group mt-4">
+                    <label for="txtPassword" class="form-label pt-1 col-md-4" aria-label="password">Password: </label>
+                    <input type="password" id="txtPassword" name="txtPassword" class="form-control col-md-4" aria-placeholder="password" [(ngModel)] ="loginViewModel.Password">
+                </div>
+                <div class="form-check mt-4" style="margin-left: 8rem">
+                    <input type="checkbox" class="form-check-input" value="remember-me" id="signInCheck">
+                    <label class="form-check-label" for="signInCheck">Remember Me</label>
+                </div>
+                <div class="d-flex flex-row mt-4 justify-content-between">
+                    <button class="btn btn-primary" type="submit" (click) = "onLoginClick($event)">Sign In</button>
+                    <button class="btn btn-secondary" type="submit">Forgot Password</button>
+                    <button class="btn btn-primary" type="submit">Register</button>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</form>
