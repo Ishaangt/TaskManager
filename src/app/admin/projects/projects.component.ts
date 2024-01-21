@@ -1,5 +1,6 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Project } from '../../project';
 import { ProjectsService } from '../../projects.service';
 
@@ -20,20 +21,24 @@ export class ProjectsComponent implements OnInit{
   searchBy: string = "SearchBy";
   searchText: string = '';
 
-  constructor(private projectsService: ProjectsService){}
+  constructor(private projectsService: ProjectsService, private router: Router){}
 
   ngOnInit(): void {
-      this.projectsService.getAllProjects().subscribe(
-        (response: Project[]) => {
+      this.projectsService.getAllProjects().subscribe({
+        next: (response: Project[]) => {
           this.projects = response;
+        },
+        error: (error) =>{
+          console.log(error);
+          this.router.navigateByUrl("/login");
         }
-      );
+      });
   }
 
   onSaveClick(){
     this.projectsService.insertProject(this.newProject).subscribe({
       next: (response) => {
-        this.projects.push(this.newProject);
+        this.projects.push(response);
         this.newProject.projectID = 0;
         this.newProject.projectName = '';
         this.newProject.dateOfStart = '';
@@ -41,8 +46,8 @@ export class ProjectsComponent implements OnInit{
 
       },
       error: (error: any) => {
-        console.log(error);
-        alert(error);
+        console.log(error.statusText);
+        alert(error.statusText);
       }
     });
   }

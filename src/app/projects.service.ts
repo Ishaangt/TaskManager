@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { Project } from './project';
@@ -12,7 +12,7 @@ export class ProjectsService {
   private NODE_HOST: string ="http://localhost:9090";
 
   getAllProjects(): Observable<Project[]>{
-    return this.httpClient.get<Project[]>(this.NODE_HOST + "/api/projects", {responseType: "json"}).pipe(
+    return this.httpClient.get<Project[]>(this.NODE_HOST + "/api/projects", { responseType: "json"}).pipe(
       map(
         (data: Project[]) => {
           // -- Do something for calculations --

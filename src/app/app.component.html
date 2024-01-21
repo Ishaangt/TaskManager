@@ -39,7 +39,7 @@
           <ul class="dropdown-menu dropdown-menu-sm-end text-small mt-2 dropdown-menu-dark" aria-labelledby="userDropdown">
             <li *ngIf="loginService.currentUser != ''"><a routerLink="profile" class="dropdown-item" title="username">{{loginService.currentUser}}</a></li>
             <li *ngIf="loginService.currentUser != ''"><hr class="dropdown-divider" style="border-color: gainsboro;"></li>
-            <li><a href="#" class="dropdown-item" (click) = "loginService.Logout()">Logout</a></li>
+            <li><a class="dropdown-item" (click) = "onLogoutClick($event)">Logout</a></li>
           </ul>
         </a>
       </div>

@@ -10,7 +10,12 @@ import { LoginService } from './login.service';
 export class AppComponent{
   title = 'TaskManager';
   currentUser: string = "";
-  constructor(public loginService : LoginService){
-   
+  constructor(public loginService : LoginService, private router: Router){
+   sessionStorage.clear();
+  }
+
+  onLogoutClick(event: any){
+    this.loginService.Logout();
+    this.router.navigate(["login"]);
   }
 }

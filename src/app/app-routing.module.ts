@@ -4,15 +4,17 @@ import { AboutComponent } from './admin/about/about.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { MyProfileComponent } from './admin/my-profile/my-profile.component';
 import { ProjectsComponent } from './admin/projects/projects.component';
+import { AuthGuard } from './can-active-gaurd.service';
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
-  {path:'dashboard', component: DashboardComponent},
+  {path:'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   {path:'about', component: AboutComponent},
-  {path:'profile', component: MyProfileComponent},
-  {path:'projects', component: ProjectsComponent},
+  {path:'profile', component: MyProfileComponent, canActivate: [AuthGuard]},
+  {path:'projects', component: ProjectsComponent, canActivate: [AuthGuard]},
   {path:'login', component: LoginComponent},
-  {path:'register', component: LoginComponent}, // Create the register Component
+  {path:'register', component: RegisterComponent},
   {path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
 
