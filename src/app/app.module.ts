@@ -12,6 +12,7 @@ import { JwtUnAuthorizedInterceptorService } from './jwt-un-authorized-intercept
 import { LoginService } from './login.service';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { ErrorComponent } from './error/error.component';
 
 const USER_KEY = "currentUser";
 export function tokenGetter() {
@@ -21,7 +22,8 @@ export function tokenGetter() {
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
