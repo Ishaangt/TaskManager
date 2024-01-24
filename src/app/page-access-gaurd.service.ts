@@ -15,7 +15,10 @@ export class PageAccessGaurdService {
     var token: string|null = sessionStorage.getItem(USER_KEY);
     var tokenRole: string = this.jwtHelperService.decodeToken(token as string).role;
     var expectedRole: string[] = next.data['expectedRoles'];
-    if(expectedRole.find((role: string) => role == tokenRole)){
+    if(expectedRole.length == 0){
+      expectedRole = ["ALL"]; // Public Endpoint
+      return true; // Approve
+    } else if(expectedRole.find((role: string) => role == tokenRole)){   // Assume Authenticated Requests Coming
       return true; // Approve
     } else {
       this.router.navigate(["error"]);

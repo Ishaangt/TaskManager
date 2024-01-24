@@ -7,6 +7,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 const NODE_HOST: string = "http://localhost:9090";
 const USER_KEY: string = "currentUser";
+const XSRF_KEY: string = "XSRFRequestToken";
+const XSRF_SERVER_KEY: string = "XSRF-REQUEST-TOKEN";
 @Injectable({
   providedIn: 'root'
 })
@@ -17,16 +19,23 @@ export class LoginService {
   
   public currentUser: string = "";
 
-  public Login(loginViewModel: LoginViewModel): Observable<UserLogin> {
+  public Login(loginViewModel: LoginViewModel): Observable<UserLogin|null> {
     this.httpClient = new HttpClient(this.httpBackend);
-    return this.httpClient.post<UserLogin>(NODE_HOST + "/api/authenticate",loginViewModel,{responseType: "json"}).pipe(
-      map(user =>{
-        if(user) {
-          this.currentUser = user.userName;
-          console.log("UserName: ", user.userName);
-          sessionStorage.setItem(USER_KEY, user.token);
+    return this.httpClient.post<UserLogin>(NODE_HOST + "/api/authenticate",loginViewModel,{responseType: "json", observe: "response"}).pipe(
+      map(response =>{
+        if(response) {
+          this.currentUser = response.body!.userName;
+          sessionStorage.setItem(USER_KEY, response.body!.token);
+          if(response.headers.get(XSRF_SERVER_KEY) == null){
+            throw new Error('XSRF Token not Found');
+          } else {
+            var XSRF: any = response.headers.get(XSRF_SERVER_KEY) as string;
+            sessionStorage.setItem(XSRF_KEY, XSRF);
+            
+          }
+          
         }
-        return user;
+        return response.body;
       })
     );
   }
