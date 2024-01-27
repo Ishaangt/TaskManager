@@ -1,7 +1,8 @@
-<h1>Projects</h1>
+
 <div class="row">
     <div class="col-lg-2"></div>
     <div class="col-lg-8">
+        <h2 class="pb-2 pt-2">Projects <i class="fa fa-spinner fa-pulse" style="font-size: 20px;" *ngIf="showLoading"></i></h2>
         <div class="row">
             <div class="col-4 pb-4">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -9,7 +10,7 @@
             </div>
             <div class="col-8 pb-4">
                 <div class="input-group pb-4">
-                    <div class="col-2">
+                    <div class="col-3">
                         <select class="form-select" id="projecSsearchByOptions" name= "SearchText" aria-label="Project Search Options" [(ngModel)] = "searchBy">
                             <option value="SearchBy" selected aria-selected="true">Search By</option>
                             <option value="projectID">Project ID</option>
@@ -19,7 +20,7 @@
                         </select>
                     </div>
                     
-                    <input type="text" class="form-control" aria-label="Search Text" placeholder="Search Text" [(ngModel)] = "searchText">
+                    <input type="text" class="form-control" aria-label="Search Text" placeholder="Search Text" [(ngModel)] = "searchText" aria-labelledby="projecSsearchByOptions">
                     <button type="button" class="btn btn-light" title="searchProjectsBtn" (click)="onSearchClick()"><i class="fa fa-search"></i></button>
                 </div>
             </div>
@@ -36,15 +37,19 @@
                     <td>Project Name</td>
                     <td>Date of Start</td>
                     <td>Team Size</td>
+                    <td>Client Locations</td>
+                    <td>Status</td>
                     <td>Actions</td>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let project of projects; let i = index">
+                <tr *ngFor="let project of projects; let i = index" [ngClass]="{'text-muted': !project.active}">
                     <td style="text-align: center;">{{project.projectID}}</td>
                     <td>{{project.projectName}}</td>
                     <td>{{project.dateOfStart}}</td>
                     <td>{{project.teamSize}}</td>
+                    <td>{{project.clientLocation?.clientLocationName}}</td>
+                    <td>{{project.status}}</td>
                     <td><div class="row mx-left">
                             <div class="col-sm-2 mx-1">
                                 <button class="btn" type="button" title="editprojectbtn" data-bs-toggle="modal" data-bs-target="#updateProjectModal"><i class="bi bi-pen-fill" style="color:darkblue;"(click)="onEditClick($event, i)"></i></button>
@@ -65,7 +70,7 @@
     <div class="modal" id="newProjectModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title">New Project</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -101,8 +106,42 @@
                     <div class="form-group row pt-1 pb-1">
                         <label for="txtNewTeamSize" class="col-sm-4 col-form-label pt-2">Team Size</label>
                         <div class="col-sm-6">
-                            <input type="number" id="txtNewTeamSize"  class="form-control"
+                            <input type="text" id="txtNewTeamSize"  class="form-control"
                                 placeholder="Team Size" name="TeamSize" [(ngModel)]="newProject.teamSize">
+                        </div>
+                    </div>
+                    <!-- Client Locations -->
+                    <div class="form-group row pt-1 pb-1">
+                        <label for="txtNewClientLocations" class="col-sm-4 form-select-label pt-2">Client Locations</label>
+                        <div class="col-sm-6">
+                            <select class="form-select" [(ngModel)]="newProject.clientLocationID" name="ClientLocation" aria-label="Please Select" id="txtNewClientLocations">
+                                <option default value="null">Please Select</option>
+                                <option *ngFor="let clientLocation of clientLocations" [value]="clientLocation.clientLocationID">{{clientLocation.clientLocationName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Status -->
+                    <div class="form-group row pt-1 pb-1">
+                        <label for="txtNewStatusInForce" class="col-sm-4 col-form-label pt-2">Status</label>
+                        <div class="col-sm-6">
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="txtNewStatusInForce" class="form-check-input" placeholder="In Force" name="In Force" value="In Force" [(ngModel)]="newProject.status">
+                                <label for="txtNewStatusInForce" class="form-check-label">In Force</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="txtNewStatusSupport" class="form-check-input" placeholder="In Support" name="In Support" value="In Support" [(ngModel)]="newProject.status">
+                                <label for="txtNewStatusSupport" class="form-check-label">In Support</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Active -->
+                    <div class="form-group row pt-1 pb-1">
+                        <label for="txtIsActive" class="col-sm-4 form-check-label pt-2">Is Active</label>
+                        <div class="col-sm-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="txtIsActive" value="true" 
+                                placeholder="isActive" name="isActive" [(ngModel)]="newProject.active" [ngClass]="{'checked': newProject.active}">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -156,8 +195,43 @@
                     <div class="form-group row pt-1 pb-1">
                         <label for="txtEditTeamSize" class="col-sm-4 col-form-label pt-2">Team Size</label>
                         <div class="col-sm-6">
-                            <input type="number" id="txtEditTeamSize"  class="form-control"
+                            <input type="text" id="txtEditTeamSize"  class="form-control"
                                 placeholder="Team Size" name="TeamSize" [(ngModel)]="editProject.teamSize">
+                        </div>
+                    </div>
+
+                    <!-- Client Locations -->
+                    <div class="form-group row pt-1 pb-1">
+                        <label for="txtEditClientLocations" class="col-sm-4 col-form-label pt-2">Client Locations</label>
+                        <div class="col-sm-6">
+                            <select class="form-select" name="ClientLocation" [(ngModel)]="editProject.clientLocationID" aria-label="Please Select" id="txtEditClientLocations">
+                                <option selected value="null">Please Select</option>
+                                <option *ngFor="let clientLoc of clientLocations" [value]="clientLoc.clientLocationID">{{clientLoc.clientLocationName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Status -->
+                    <div class="form-group row pt-1 pb-1">
+                        <label for="txtEditStatusInForce" class="col-sm-4 col-form-label pt-2">Status</label>
+                        <div class="col-sm-6">
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="txtEditStatusInForce" class="form-check-input" placeholder="In Force" name="In Force" value="In Force" [(ngModel)]="editProject.status">
+                                <label for="txtEditStatusInForce" class="form-check-label">In Force</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="txtEditStatusSupport" class="form-check-input" placeholder="In Support" name="In Support" value="In Support" [(ngModel)]="editProject.status">
+                                <label for="txtEditStatusSupport" class="form-check-label">In Support</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Active -->
+                    <div class="form-group row pt-1 pb-1">
+                        <label for="txtEditIsActive" class="col-sm-4 form-check-label pt-2">Is Active</label>
+                        <div class="col-sm-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="txtEditIsActive" value="true" 
+                                placeholder="isActive" name="isActive" [(ngModel)]="newProject.active" [ngClass]="{'checked': newProject.active}">
+                            </div>
                         </div>
                     </div>
                 </div>

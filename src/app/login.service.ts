@@ -21,7 +21,7 @@ export class LoginService {
 
   public Login(loginViewModel: LoginViewModel): Observable<UserLogin|null> {
     this.httpClient = new HttpClient(this.httpBackend);
-    return this.httpClient.post<UserLogin>(NODE_HOST + "/api/authenticate",loginViewModel,{responseType: "json", observe: "response"}).pipe(
+    return this.httpClient.post<UserLogin>(NODE_HOST + "/authenticate",loginViewModel,{responseType: "json", observe: "response"}).pipe(
       map(response =>{
         if(response) {
           this.currentUser = response.body!.userName;

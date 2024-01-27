@@ -23,6 +23,7 @@ export class ProjectsService {
   }
 
   insertProject(newProject: Project): Observable<Project>{
+    console.log("NewProject", newProject);
     return this.httpClient.post<Project>(this.NODE_HOST + "/api/projects",newProject,{responseType: "json"})
   }
 

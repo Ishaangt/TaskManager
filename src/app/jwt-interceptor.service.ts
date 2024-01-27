@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 const USER_KEY: string = "currentUser";
 const XSRF_KEY: string = "XSRFRequestToken";
-const XSRF_SERVER_KEY: string = "XSRF-REQUEST-TOKEN";
+const XSRF_SERVER_KEY: string = "X-XSRF-TOKEN";
 @Injectable({
   providedIn: 'root'
 })
