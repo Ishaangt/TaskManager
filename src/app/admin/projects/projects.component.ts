@@ -1,6 +1,8 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ClientLocation } from '../../client-location';
+import { ClientLocationsService } from '../../client-locations.service';
 import { Project } from '../../project';
 import { ProjectsService } from '../../projects.service';
 
@@ -10,18 +12,20 @@ import { ProjectsService } from '../../projects.service';
   styleUrl: './projects.component.scss'
 })
 export class ProjectsComponent implements OnInit{
-
+  //vars init
   projects: Project[] = [];
+  clientLocations: ClientLocation[] = [];
   newProject: Project = new Project();
   editProject: Project = new Project();
-  editProjectIndex: number = 0;
+  editProjectIndex: number = -1;
   deleteProject: Project = new Project();
-  deleteProjectIndex: number = 0;
-
+  deleteProjectIndex: number = -1;
+  showLoading: boolean = true;
+  // Search Init
   searchBy: string = "SearchBy";
   searchText: string = '';
 
-  constructor(private projectsService: ProjectsService, private router: Router){}
+  constructor(private projectsService: ProjectsService, private router: Router, private clientLocationsService: ClientLocationsService){}
 
   ngOnInit(): void {
       this.projectsService.getAllProjects().subscribe({
@@ -31,49 +35,49 @@ export class ProjectsComponent implements OnInit{
         error: (error) =>{
           console.log(error);
           this.router.navigateByUrl("/login");
-        }
+        },
+        complete: (() => {
+          this.showLoading = false;
+        })
       });
+
+      this.clientLocationsService.getClientLocations().subscribe({
+        next: (response: ClientLocation[]) => {
+          this.clientLocations = response;
+        },
+        error: (error)=>{
+          console.log(error);
+        }
+      })
   }
 
   onSaveClick(){
-    this.projectsService.insertProject(this.newProject).subscribe({
-      next: (response) => {
-        this.projects.push(response);
-        this.newProject.projectID = 0;
-        this.newProject.projectName = '';
-        this.newProject.dateOfStart = '';
-        this.newProject.teamSize = 0;
+    console.log(this.newProject);
+    // this.projectsService.insertProject(this.newProject).subscribe({
+    //   next: (response) => {
+    //     var project: Project = this.mapProjectToResponse(new Project(),response);
+    //     this.projects.push(project);
+    //     this.newProject = this.resetProjectToDefaults(this.newProject);
 
-      },
-      error: (error: any) => {
-        console.log(error.statusText);
-        alert(error.statusText);
-      }
-    });
+    //   },
+    //   error: (error: any) => {
+    //     console.log(error.statusText);
+    //     alert(error.statusText);
+    //   }
+    // });
   }
 
   onEditClick(event: any, index: number){
-    this.editProject.projectID = this.projects[index].projectID;
-    this.editProject.projectName = this.projects[index].projectName;
-    this.editProject.dateOfStart = this.projects[index].dateOfStart;
-    this.editProject.teamSize = this.projects[index].teamSize;
+    this.editProject = this.mapProjectToResponse(this.editProject, this.projects[index]);
     this.editProjectIndex = index;
   }
 
   onUpdateClick(){
     this.projectsService.updateProject(this.editProject).subscribe({
       next: (response: Project) => {
-        var projectTemp: Project = new Project();
-        projectTemp.projectID = response.projectID;
-        projectTemp.projectName = response.projectName;
-        projectTemp.dateOfStart = response.dateOfStart;
-        projectTemp.teamSize = response.teamSize;
-
+        var projectTemp: Project = this.mapProjectToResponse(new Project, response);
         this.projects[this.editProjectIndex] = projectTemp;
-        this.editProject.projectID = 0;
-        this.editProject.projectName = '';
-        this.editProject.dateOfStart = '';
-        this.editProject.teamSize = 0;
+        this.editProject = this.resetProjectToDefaults(this.editProject);
       },
       error: (error: any) => {
         console.log(error);
@@ -89,11 +93,10 @@ export class ProjectsComponent implements OnInit{
   }
 
   onDeleteConfirmClick(){
-    this.projectsService.deleteProject(this.deleteProject.projectID).subscribe({
+    this.projectsService.deleteProject(this.deleteProject.projectID as number).subscribe({
       next: (response: any) => {
         this.projects.splice(this.deleteProjectIndex, 1);
-        this.deleteProject.projectID = 0;
-        this.deleteProject.projectName = '';
+        this.deleteProject = this.resetProjectToDefaults(this.deleteProject);
       },
       error: (error: any) =>{
         console.log(error);
@@ -117,5 +120,36 @@ export class ProjectsComponent implements OnInit{
         }
       })
     }
+  }
+
+
+  mapProjectToResponse(project: Project, response: any): Project {
+    project.projectID = response.projectID;
+    project.projectName = response.projectName;
+    project.teamSize = response.teamSize;
+    project.dateOfStart = response.dateOfStart.split("/").reverse().join(""); //yyyy-MM-dd
+    project.status = response.status;
+    project.clientLocationID = response.clientLocationID;
+    project.clientLocation = response.clientLocation;
+    project.active = response.active;
+    return project;
+  }
+
+  resetProjectToDefaults(project: Project){
+    project.projectID = null;
+    project.projectName = null;
+    project.teamSize = null;
+    project.dateOfStart = null;
+    project.status = null;
+    project.clientLocation = null;
+    project.clientLocationID = null;
+    project.active = false;
+    return project;
+  }
+
+  onSelectChange(value: any){
+    var clientLocation = new ClientLocation();
+    clientLocation.clientLocationID = value;
+    console.log(clientLocation.clientLocationID);
   }
 }
